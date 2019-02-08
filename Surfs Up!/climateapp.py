@@ -9,7 +9,7 @@ from sqlalchemy import create_engine, func
 from sqlalchemy.ext.automap import automap_base
 from sqlalchemy.orm import Session
 
-engine = create_engine("sqlite:///Resources/hawaii.sqlite")
+engine = create_engine("sqlite:///Resources/hawaii.sqlite?check_same_thread=False")
 
 # reflect an existing database into a new model
 Base = automap_base()
@@ -31,19 +31,23 @@ app = Flask(__name__)
 def home():
     print("Server received request for 'Home' page...")
     return (
-        f"Welcome to the Climate App API!<br/>"
+ 	    f"Welcome to the Climate App API!<br/>"
         f"Available Routes:<br/>"
+        f"1.Date and precipitation values from 2016-08-23 to 2017-08-23:<br/>"
         f"/api/v1.0/precipitation<br/>"
+        f"2.List of stations:<br/>"
         f"/api/v1.0/stations<br/>"
+        f"3.Date and temperature values from 2016-08-23 to 2017-08-23:<br/>"
         f"/api/v1.0/tobs<br/>"
-        f"/api/v1.0/<start><br/>"
-        f"/api/v1.0/<start>/<end>"
+        f"4. Statistics for combined stations. Enter start date in form 'yyyy', 'yyyy-mm', or 'yyyy-mm-dd':<br/>"
+        f"/api/v1.0/start<br/>"
+        f"5. Statistics for combined stations. Enter start and end date in form 'yyyy', 'yyyy-mm', or 'yyyy-mm-dd':<br/>"
+        f"/api/v1.0/start/end"
     )
 
 @app.route("/api/v1.0/precipitation")
 
 def precipitation():
-
     last_date = session.query(Measurement.date).order_by(Measurement.date.desc()).first()
     one_year_ago = dt.date(2017, 8, 23) - dt.timedelta(days=365)
 
